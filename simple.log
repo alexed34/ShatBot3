@@ -29,3 +29,7 @@
 2020-09-19 20:26:21 - __main__ -  55 - INFO - get longpoll
 2020-09-19 20:32:57 - vk-logger -  51 - INFO - start bot vk info
 2020-09-19 20:32:57 - vk-logger -  55 - INFO - get longpoll
+2020-09-20 10:42:39 - vk-logger -  50 - INFO - start bot vk info
+2020-09-20 10:42:39 - vk-logger -  54 - INFO - get longpoll
+2020-09-20 10:42:59 - vk-logger -  19 - INFO - start get_answer_dialogflow
+2020-09-20 10:43:01 - vk-logger -  64 - INFO - answer to the question
