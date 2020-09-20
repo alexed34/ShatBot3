@@ -2,5 +2,5 @@ venv/
 .env
 devman-bot-3-f9962c1b1db4.json
 .idea/*
-__pycache__/
-*.log
+__pycache__/*
+simple*.log
