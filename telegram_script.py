@@ -5,13 +5,11 @@ import os
 import dialogflow_v2 as dialogflow
 from dotenv import load_dotenv
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
-
+import app_logger
 load_dotenv()
 
-logging.basicConfig(
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-    level=logging.INFO)
-logger = logging.getLogger(__name__)
+
+logger = app_logger.getLogger(__name__)
 
 
 def start(bot, update):
