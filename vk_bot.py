@@ -12,7 +12,7 @@ import app_logger
 
 load_dotenv()
 
-logger = app_logger.get_logger('vk-logger')
+logger = app_logger.get_logger(__name__)
 
 
 def get_answer_dialogflow(texts):
@@ -65,7 +65,7 @@ def main():
                         logger.info('answer to the question')
 
         except:
-            logger.exception('Неизвестная ошибка')
+            logger.exception('Mistake vk_bot')
             return False
 
 

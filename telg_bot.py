@@ -17,12 +17,6 @@ def start(bot, update):
     bot.send_message(chat_id=update.message.chat_id,
                      text="Я бот, поговори со мной")
 
-
-def echo(bot, update):
-    """ Повторяет написанную фразу"""
-    bot.send_message(chat_id=update.message.chat_id, text=update.message.text)
-
-
 def answer(bot, update):
     """ Отвечает с помощью dialogflow,
     за связь с dialogflow отвечает detect_intent_texts()"""
@@ -62,20 +56,23 @@ def detect_intent_texts(texts):
 
 
 def main():
-    telegram_token = os.getenv('TELEGRAM_BOT')
-    updater = Updater(telegram_token)
-    dispatcher = updater.dispatcher
+    try:
+        telegram_token = os.getenv('TELEGRAM_BOT')
+        updater = Updater(telegram_token)
+        dispatcher = updater.dispatcher
 
-    caps_handler = CommandHandler('caps', caps, pass_args=True)
-    dispatcher.add_handler(caps_handler)
+        caps_handler = CommandHandler('caps', caps, pass_args=True)
+        dispatcher.add_handler(caps_handler)
 
-    start_handler = CommandHandler('start', start)
-    dispatcher.add_handler(start_handler)
+        start_handler = CommandHandler('start', start)
+        dispatcher.add_handler(start_handler)
 
-    answer_handler = MessageHandler(Filters.text, answer)
-    dispatcher.add_handler(answer_handler)
+        answer_handler = MessageHandler(Filters.text, answer)
+        dispatcher.add_handler(answer_handler)
 
-    updater.start_polling()
+        updater.start_polling()
+    except:
+        logger.exception('Mistake telg_bot')
 
 
 if __name__ == '__main__':
