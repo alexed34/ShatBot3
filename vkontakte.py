@@ -14,6 +14,7 @@ load_dotenv()
 
 logger = app_logger.get_logger('vk-logger')
 
+
 def get_answer_dialogflow(texts):
     """Связывается с dialogflow, возращает ответы на вопросы через dialogflow"""
     logger.info('start get_answer_dialogflow')

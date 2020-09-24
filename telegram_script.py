@@ -1,15 +1,15 @@
 import json
-import logging
 import os
 
 import dialogflow_v2 as dialogflow
 from dotenv import load_dotenv
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
+
 import app_logger
+
 load_dotenv()
 
-
-logger = app_logger.getLogger(__name__)
+logger = app_logger.get_logger(__name__)
 
 
 def start(bot, update):
@@ -31,7 +31,7 @@ def answer(bot, update):
 
 
 def caps(bot, update, args):
-    """ В ответе пповторяет введенный текст большими буквами"""
+    """ В ответе повторяет введенный текст большими буквами"""
     text_caps = ' '.join(args).upper()
     bot.send_message(chat_id=update.message.chat_id, text=text_caps)
 
@@ -45,18 +45,18 @@ def detect_intent_texts(texts):
     project_id = config_json['project_id']
     session_id = config_json['client_id']
     session = session_client.session_path(project_id, session_id)
-    print('Session path: {}\n'.format(session))
+    logger.debug('Session path: {}\n'.format(session))
     text_input = dialogflow.types.TextInput(
         text=texts, language_code='ru-RU')
     query_input = dialogflow.types.QueryInput(text=text_input)
     response = session_client.detect_intent(
         session=session, query_input=query_input)
-    print('=' * 20)
-    print('Query text: {}'.format(response.query_result.query_text))
-    print('Detected intent: {} (confidence: {})\n'.format(
+    logger.debug('=' * 20)
+    logger.debug('Query text: {}'.format(response.query_result.query_text))
+    logger.debug('Detected intent: {} (confidence: {})\n'.format(
         response.query_result.intent.display_name,
         response.query_result.intent_detection_confidence))
-    print('Fulfillment text: {}\n'.format(
+    logger.debug('Fulfillment text: {}\n'.format(
         response.query_result.fulfillment_text))
     return response.query_result.fulfillment_text
 
@@ -72,8 +72,8 @@ def main():
     start_handler = CommandHandler('start', start)
     dispatcher.add_handler(start_handler)
 
-    echo_handler = MessageHandler(Filters.text, answer)
-    dispatcher.add_handler(echo_handler)
+    answer_handler = MessageHandler(Filters.text, answer)
+    dispatcher.add_handler(answer_handler)
 
     updater.start_polling()
 
