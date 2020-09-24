@@ -57,6 +57,7 @@ def detect_intent_texts(texts):
 
 def main():
     try:
+        logger.debug('Старт telg_bot')
         telegram_token = os.getenv('TELEGRAM_BOT')
         updater = Updater(telegram_token)
         dispatcher = updater.dispatcher
