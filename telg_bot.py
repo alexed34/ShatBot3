@@ -20,6 +20,7 @@ def start(bot, update):
 def answer(bot, update):
     """ Отвечает с помощью dialogflow,
     за связь с dialogflow отвечает detect_intent_texts()"""
+    logger.debug('Старт answer')
     text = detect_intent_texts(update.message.text)
     bot.send_message(chat_id=update.message.chat_id, text=text)
 
@@ -32,27 +33,31 @@ def caps(bot, update, args):
 
 def detect_intent_texts(texts):
     """Связывается с dialogflow, возращает ответы на вопросы через dialogflow"""
-    session_client = dialogflow.SessionsClient()
-    path_json_config = os.getenv('GOOGLE_APPLICATION_CREDENTIALS')
-    with open(path_json_config, 'r') as f:
-        config_json = json.load(f)
-    project_id = config_json['project_id']
-    session_id = config_json['client_id']
-    session = session_client.session_path(project_id, session_id)
-    logger.debug('Session path: {}\n'.format(session))
-    text_input = dialogflow.types.TextInput(
-        text=texts, language_code='ru-RU')
-    query_input = dialogflow.types.QueryInput(text=text_input)
-    response = session_client.detect_intent(
-        session=session, query_input=query_input)
-    logger.debug('=' * 20)
-    logger.debug('Query text: {}'.format(response.query_result.query_text))
-    logger.debug('Detected intent: {} (confidence: {})\n'.format(
-        response.query_result.intent.display_name,
-        response.query_result.intent_detection_confidence))
-    logger.debug('Fulfillment text: {}\n'.format(
-        response.query_result.fulfillment_text))
-    return response.query_result.fulfillment_text
+    try:
+        logger.debug('Старт detect_intent_texts')
+        session_client = dialogflow.SessionsClient()
+        path_json_config = os.getenv('GOOGLE_APPLICATION_CREDENTIALS')
+        with open(path_json_config, 'r') as f:
+            config_json = json.load(f)
+        project_id = config_json['project_id']
+        session_id = config_json['client_id']
+        session = session_client.session_path(project_id, session_id)
+        logger.debug('Session path: {}\n'.format(session))
+        text_input = dialogflow.types.TextInput(
+            text=texts, language_code='ru-RU')
+        query_input = dialogflow.types.QueryInput(text=text_input)
+        response = session_client.detect_intent(
+            session=session, query_input=query_input)
+        logger.debug('=' * 20)
+        logger.debug('Query text: {}'.format(response.query_result.query_text))
+        logger.debug('Detected intent: {} (confidence: {})\n'.format(
+            response.query_result.intent.display_name,
+            response.query_result.intent_detection_confidence))
+        logger.debug('Fulfillment text: {}\n'.format(
+            response.query_result.fulfillment_text))
+        return response.query_result.fulfillment_text
+    except:
+        logger.exception('Mistake func detect_intent_texts')
 
 
 def main():
@@ -69,7 +74,9 @@ def main():
         dispatcher.add_handler(start_handler)
 
         answer_handler = MessageHandler(Filters.text, answer)
+        logger.debug('Старт answer_handler')
         dispatcher.add_handler(answer_handler)
+
 
         updater.start_polling()
     except:
